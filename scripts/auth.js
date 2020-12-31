@@ -1,3 +1,17 @@
+// Listen for auth status changes
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // get data
+    db.collection('guides')
+      .get()
+      .then(snapshot => {
+        setupGuides(snapshot.docs);
+      });
+  } else {
+    setupGuides([]);
+  }
+});
+
 // Sign up
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', e => {
@@ -19,9 +33,7 @@ signupForm.addEventListener('submit', e => {
 const logout = document.querySelector('#logout');
 logout.addEventListener('click', e => {
   e.preventDefault();
-  auth.signOut().then(() => {
-    console.log('User Signed out');
-  });
+  auth.signOut();
 });
 
 // Login
